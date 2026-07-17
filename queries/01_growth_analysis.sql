@@ -1,13 +1,17 @@
-WITH recent_activity AS (
+WITH params AS (
+    SELECT DATE '2016-06-22' AS analysis_date
+),
+recent_activity AS (
     SELECT
         repo_name,
         COUNT(commit) AS commits_last_30_days
     FROM
         `bigquery-public-data.github_repos.sample_commits`
+        CROSS JOIN params p
     WHERE
         DATE(committer.date)
-        BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
-        AND CURRENT_DATE()
+        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 30 DAY)
+        AND p.analysis_date
     GROUP BY repo_name
 ),
 
@@ -17,10 +21,11 @@ past_activity AS (
         COUNT(commit) AS commits_prev_30_days
     FROM
         `bigquery-public-data.github_repos.sample_commits`
+        CROSS JOIN params p
     WHERE
         DATE(committer.date)
-        BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 60 DAY)
-        AND DATE_SUB(CURRENT_DATE(), INTERVAL 31 DAY)
+        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 60 DAY)
+        AND DATE_SUB(p.analysis_date, INTERVAL 31 DAY)
     GROUP BY repo_name
 )
 

@@ -1,2 +1,17 @@
 .DS_Store
 **/.DS_Store
+
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+*.xlsx
+*.tsv
+
+# Ignore random CSV exports by default
+*.csv
+
+# Keep final processed dashboard CSVs
+!data/
+!data/processed/
+!data/processed/normalized_momentum_score.csv
+!data/processed/repository_discovery_radar.csv

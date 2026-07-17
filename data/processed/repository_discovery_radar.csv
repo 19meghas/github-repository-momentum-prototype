@@ -1,0 +1,7 @@
+repo_name,total_commits,contributor_count,log_contributor_count,commits_last_30_days,commits_prev_30_days,growth_rate,adjusted_growth_rate,growth_percentile,contributor_percentile,repository_radar_score,median_log_contributor_count,median_repository_radar_score,radar_zone
+twbs/bootstrap,11777,775,2.88930170250631,33,0,,100,1,0.6,80,2.6159500516564012,50,Momentum Leader
+torvalds/linux,602604,15497,4.1902476330381964,1418,6951,-79.6,-79.6,0,1,50,2.6159500516564012,50,Stable Monitor
+facebook/react,6875,815,2.9111576087399764,135,159,-15.09,-15.09,0.2,0.8,50,2.6159500516564012,50,Stable Monitor
+tensorflow/tensorflow,5253,306,2.48572142648158,1006,639,57.43,57.43,0.8,0.2,50,2.6159500516564012,50,Growing Candidate
+apple/swift,38891,413,2.6159500516564012,1092,1027,6.33,6.33,0.4,0.4,40,2.6159500516564012,50,Watchlist
+Microsoft/vscode,6909,138,2.1398790864012365,1165,890,30.9,30.9,0.6,0,30,2.6159500516564012,50,Growing Candidate

@@ -2,70 +2,45 @@
 
 ## Project Overview
 
-This project analyzes public GitHub repository activity using SQL and Python visualizations to identify repositories showing growth, activity momentum, and normalized engagement patterns.
+This project is an exploratory GitHub repository analytics prototype built with SQL and Python.
 
-The project was created as an initial repository-level analytics prototype before expanding into a broader GitHub Technology Radar and Innovation Intelligence project.
+It uses public GitHub sample commit data from BigQuery to examine how raw repository activity can be transformed into interpretable indicators such as recent activity, prior activity, growth rate, contributor participation, and normalized momentum.
 
-The focus of this prototype is repository-level momentum analysis, not technology/topic-level early detection.
+The goal is not to build a production-grade GitHub ranking system, but to demonstrate how SQL-based feature engineering and Python visualizations can be used to explore repository behavior and surface useful analytical patterns.
 
 ---
 
-## Business Problem
+## Analytical Question
 
-GitHub contains millions of repositories, but raw activity alone does not always explain which repositories are gaining momentum.
+GitHub repositories generate large amounts of activity data, but raw commit counts alone do not always explain which repositories are gaining momentum.
 
-This project explores how repository activity data can be transformed into interpretable indicators such as:
+This project explores a simple analytical question:
 
-* recent activity,
-* historical activity,
-* growth rate,
-* contributor participation,
-* and normalized momentum.
+> How can public GitHub commit data be used to compare repository activity, growth, and contributor participation?
 
-The goal is to create a simple analytical framework for identifying high-momentum repositories using SQL.
+The analysis converts raw commit records into repository-level indicators and uses those indicators to create a simple momentum ranking and discovery view.
 
 ---
 
 ## Analytical Framework
 
-The project includes three main analytical layers:
+The project follows a simple SQL-based analytical progression:
 
-### 1. Repository Growth Analysis
+### 1. Growth Analysis
 
-Compares recent repository activity against prior activity to identify repositories with accelerating growth.
-
-Key output:
-
-```text
-growth_rate
-```
+Compares recent commit activity with prior-period commit activity to calculate repository growth.
 
 ### 2. Repository Momentum Score
 
-Combines repository activity and contributor participation into a momentum score.
-
-Key outputs:
-
-```text
-commits_last_30_days
-contributor_count
-momentum_score
-```
+Combines recent activity, growth rate, and contributor participation into a simple composite score.
 
 ### 3. Normalized Momentum Score
 
-Introduces normalization to reduce the risk of large repositories dominating the ranking purely because of scale.
+Applies normalization so repositories can be compared more fairly across different levels of activity and scale.
 
-Techniques used:
+### 4. Repository Discovery View
 
-```text
-window functions
-SAFE_DIVIDE()
-normalization
-composite scoring
-ranking
-```
-
+Uses visual analysis to compare repositories by momentum, contributor base, and activity status.
 ---
 
 ## Tools Used
@@ -77,6 +52,26 @@ ranking
 * GitHub
 
 ---
+
+
+
+
+## Dashboard Story
+
+The dashboard is designed as a visual walkthrough of the analysis:
+
+1. Repository Momentum Ranking  
+2. Growth vs Contributor Scale  
+3. Momentum Score Components  
+4. Repository Discovery Radar  
+5. Key Insights and Limitations  
+
+The goal is to show how a basic public dataset can be explored, transformed, and interpreted using SQL and Python.
+
+---
+
+
+
 
 ## Project Structure
 
@@ -104,8 +99,10 @@ It later informed a more advanced project focused on early technology detection 
 
 ---
 
-## Scope
+## Scope and Limitations
 
-This project is a repository-level analytics prototype.
+This is a repository-level exploratory analytics prototype.
 
-It does not attempt to identify emerging technologies or technology topics directly. That broader problem is handled in the separate GitHub Technology Radar and Innovation Intelligence project.
+It focuses on commit activity and contributor participation from a public GitHub sample dataset. It does not include stars, forks, issues, pull requests, topics, bot filtering, or real-time GitHub activity.
+
+The project should be interpreted as a learning and portfolio prototype showing how repository activity data can be transformed into analytical signals.
