@@ -1,65 +1,57 @@
-# 📈 Key Insights and Analytical Observations
+# Key Insights from Repository Momentum Analysis
 
-## 1. High Growth Does Not Always Mean Large Scale
+## 1. Raw Commit Activity Is Only One Part of Repository Momentum
 
-Several repositories showed extremely high growth rates despite relatively low overall commit activity.
+Repositories with high commit volume may appear important at first, but activity alone does not explain whether a repository is growing, stable, or slowing down.
 
-This suggests that:
-- early-stage repositories can exhibit rapid acceleration,
-- but growth percentages alone may overstate strategic importance.
-
-This observation motivated the creation of a normalized momentum scoring framework.
+This motivated the use of additional indicators such as growth rate and contributor participation.
 
 ---
 
-## 2. Contributor Participation Improves Momentum Reliability
+## 2. Growth Rate Needs Context
 
-Repositories with:
-- higher contributor participation,
-- sustained commit activity,
-- and positive growth trends
+A repository can show a high growth rate because it had very little activity in the previous period.
 
-tended to represent more stable ecosystem momentum compared to repositories driven by a very small number of contributors.
+This means growth percentages should not be interpreted alone. They are more useful when viewed alongside recent commit volume and contributor count.
 
 ---
 
-## 3. Raw Activity Metrics Can Be Misleading
+## 3. Contributor Participation Improves Signal Quality
 
-Repositories with extremely large commit volumes often dominated ranking systems when raw metrics were used directly.
+Contributor count helps distinguish between repositories with broader participation and repositories where activity may be concentrated among only a few contributors.
 
-Normalization techniques significantly improved score balance and comparability across repositories.
+This makes the momentum score more balanced than a simple commit-count ranking.
 
 ---
 
-## 4. Momentum Detection Requires Multi-Metric Analysis
+## 4. Normalization Makes Repositories Easier to Compare
 
-Single metrics such as:
+Large repositories can dominate raw scoring systems because of their scale.
+
+Normalization helps compare repositories across different activity levels by converting growth, recent commits, and contributor participation into more balanced score components.
+
+---
+
+## 5. Discovery Views Are Useful for Exploration
+
+The repository discovery zone matrix is not a final ranking system.
+
+It is a visual exploration layer that helps separate momentum leaders, growing candidates, stable monitors, and watchlist repositories.
+
+---
+
+# Limitations
+
+This prototype uses public GitHub sample commit data and should be interpreted as an exploratory analysis.
+
+It does not include:
 - stars,
-- commits,
-- or contributor count
+- forks,
+- issues,
+- pull requests,
+- topics,
+- bot filtering,
+- repository metadata,
+- or real-time GitHub activity.
 
-do not fully capture repository momentum independently.
-
-A composite framework provides a more balanced representation of ecosystem activity.
-
----
-
-## 5. Emerging Repositories Create Unique Detection Challenges
-
-Repositories with no previous-period activity produced NULL growth rates.
-
-Instead of treating these as missing values, the analysis classified them as:
-- `New/Emerging`
-
-This highlights the importance of handling analytical edge cases thoughtfully.
-
----
-
-# 🚀 Future Analytical Directions
-
-Potential future enhancements include:
-- repository star/fork integration,
-- contributor network graph analysis,
-- trend forecasting,
-- anomaly detection,
-- and ecosystem clustering.
+Future versions could extend the analysis with additional GitHub activity signals and more advanced time-series methods.

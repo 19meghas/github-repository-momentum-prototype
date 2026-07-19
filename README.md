@@ -61,9 +61,9 @@ Uses visual analysis to compare repositories by momentum, contributor base, and 
 The dashboard is designed as a visual walkthrough of the analysis:
 
 1. Repository Momentum Ranking  
-2. Growth vs Contributor Scale  
-3. Momentum Score Components  
-4. Repository Discovery Radar  
+2. What Drives Repository Momentum  
+3. Momentum Driver Fingerprint  
+4. Repository Discovery Zone Matrix  
 5. Key Insights and Limitations  
 
 The goal is to show how a basic public dataset can be explored, transformed, and interpreted using SQL and Python.
@@ -79,15 +79,28 @@ The goal is to show how a basic public dataset can be explored, transformed, and
 queries/
 ├── 01_growth_analysis.sql
 ├── 02_repository_momentum_score.sql
-└── 03_normalized_momentum_score.sql
+├── 03_normalized_momentum_score.sql
+└── 04_repository_discovery_radar.sql
+
+data/
+├── README.md
+└── processed/
+    ├── normalized_momentum_score.csv
+    └── repository_discovery_radar.csv
 
 notebooks/
-└── Plotly analysis notebooks or visualization work
+└── 01_repository_momentum_dashboard.ipynb
 
 docs/
 └── assets/
     └── charts/
-```
+        ├── 01_repository_momentum_ranking.png
+        ├── 02_repository_momentum_drivers.png
+        ├── 03_momentum_driver_fingerprint.png
+        └── 04_repository_discovery_zone_matrix.png
+
+
+
 
 ---
 
