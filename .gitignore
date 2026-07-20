@@ -15,3 +15,20 @@
 !data/processed/
 !data/processed/normalized_momentum_score.csv
 !data/processed/repository_discovery_radar.csv
+
+# Ignore local Python environment and generated cache files
+.venv/
+__pycache__/
+**/__pycache__/
+
+# Ignore notebook-generated interactive figure files
+notebooks/iframe_figures/
+
+# Ignore notebook working copies and temporary exports
+notebooks/*-Copy*.ipynb
+notebooks/rough_*.ipynb
+notebooks/*.pdf
+notebooks/*.png
+
+# Keep superseded query drafts local
+archive/

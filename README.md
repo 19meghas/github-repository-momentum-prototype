@@ -1,12 +1,22 @@
 # GitHub Repository Momentum Prototype
 
-A SQL and Python analytics prototype for exploring repository-level momentum using public GitHub commit data.
+A SQL, Python, and Streamlit analytics project for exploring repository-level momentum using public GitHub commit data.
 
 This project transforms raw GitHub commit records into interpretable repository signals, including recent activity, prior-period activity, growth rate, contributor participation, normalized momentum score, and discovery-zone classification.
 
 The goal is not to create a production-grade GitHub ranking system. Instead, this project demonstrates how public developer activity data can be cleaned, modeled, scored, visualized, and interpreted as a portfolio-ready analytics workflow.
 
 ---
+
+
+## Interactive Dashboard Preview
+
+The Streamlit dashboard provides filter-responsive KPI summaries and four interactive Plotly views built from the finalized repository momentum outputs.
+
+![Interactive Streamlit Dashboard](docs/assets/streamlit/streamlit_dashboard_overview.png)
+
+---
+
 
 ## Analytical Question
 
@@ -28,7 +38,7 @@ The project builds a repository-level momentum prototype that:
 - normalizes activity signals for fairer comparison,
 - creates a composite momentum score,
 - separates repositories into discovery zones,
-- and visualizes the results through a notebook-based dashboard.
+- and visualizes the results through notebook-based and interactive Streamlit dashboards.
 
 ---
 
@@ -113,7 +123,7 @@ This creates an exploratory discovery layer that is easier to interpret than a s
 
 ## Dashboard Story
 
-The notebook dashboard is designed as a visual walkthrough:
+The notebook prototype and interactive Streamlit dashboard follow the same analytical walkthrough:
 
 1. **Repository Momentum Ranking** — which repositories score highest?
 2. **What Drives Repository Momentum?** — is momentum driven by growth, contributors, or recent activity?
@@ -131,6 +141,7 @@ Together, these views move from ranking to explanation to classification.
 - Python
 - Pandas
 - Plotly
+- Streamlit
 - Jupyter Notebook
 - GitHub
 
@@ -149,6 +160,9 @@ Together, these views move from ranking to explanation to classification.
 | `data/processed/` | Final processed CSV outputs used by the notebook and dashboard. |
 | `notebooks/01_repository_momentum_dashboard.ipynb` | Notebook-based dashboard prototype built with Python and Plotly. |
 | `docs/assets/charts/` | Exported PNG chart assets used in the README and documentation. |
+| `app/streamlit_app.py` | Interactive Streamlit dashboard built from the finalized processed CSV outputs. |
+| `.streamlit/config.toml` | Streamlit theme and application configuration. |
+| `requirements.txt` | Python package dependencies required to run the dashboard. |
 | `INSIGHTS.md` | Summary of key analytical insights and project limitations. |
 
 ---
@@ -193,12 +207,23 @@ Potential extensions include:
 - adding repository topics and metadata,
 - expanding the analysis across multiple months,
 - tracking consistency and acceleration over time,
-- and converting the notebook prototype into an interactive dashboard app.
+- and deploying the Streamlit dashboard for public portfolio access.
 
 ---
 
 ## Current Status
 
-This repository contains the first portfolio-ready notebook dashboard prototype.
+The repository momentum analysis, notebook-based dashboard prototype, and interactive Streamlit dashboard v1 are complete.
 
-The next planned phase is to convert the finalized metrics and visuals into an interactive Streamlit dashboard.
+The Streamlit application loads the finalized processed CSV outputs locally and provides:
+
+- filter-responsive KPI summaries
+- repository, activity-status, and radar-zone filters
+- four interactive Plotly visualizations
+- dashboard interpretation and documented limitations
+
+Run the dashboard locally with:
+
+```bash
+python -m streamlit run app/streamlit_app.py
+```
