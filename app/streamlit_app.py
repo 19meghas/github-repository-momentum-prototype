@@ -12,6 +12,768 @@ st.set_page_config(
     layout="wide",
 )
 
+# -------------------------------------------------------------------
+# Page-wide visual design foundation
+# -------------------------------------------------------------------
+
+st.markdown(
+    """
+    <style>
+        /* -----------------------------------------------------------
+           Core design tokens
+           ----------------------------------------------------------- */
+
+        :root {
+            --momentum-ink: #0F172A;
+            --momentum-muted: #64748B;
+            --momentum-soft: #94A3B8;
+            --momentum-border: #E2E8F0;
+            --momentum-surface: #FFFFFF;
+            --momentum-canvas: #F6F8FC;
+            --momentum-indigo: #6366F1;
+            --momentum-violet: #8B5CF6;
+            --momentum-cyan: #22D3EE;
+            --momentum-teal: #14B8A6;
+            --momentum-gold: #EAB308;
+        }
+
+
+        /* -----------------------------------------------------------
+           Application canvas
+           ----------------------------------------------------------- */
+
+        html,
+        body,
+        [class*="css"] {
+            font-family:
+                Inter,
+                ui-sans-serif,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        .stApp {
+            color: var(--momentum-ink);
+            background:
+                radial-gradient(
+                    circle at 82% 3%,
+                    rgba(99, 102, 241, 0.08),
+                    transparent 24rem
+                ),
+                radial-gradient(
+                    circle at 18% 14%,
+                    rgba(34, 211, 238, 0.055),
+                    transparent 22rem
+                ),
+                var(--momentum-canvas);
+        }
+
+        [data-testid="stAppViewContainer"] {
+            background: transparent;
+        }
+
+        [data-testid="stHeader"] {
+            background: rgba(246, 248, 252, 0.82);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.72);
+        }
+
+
+        /* -----------------------------------------------------------
+           Main content width and spacing
+           ----------------------------------------------------------- */
+
+        .main .block-container {
+            max-width: 1440px;
+            padding-top: 2.4rem;
+            padding-right: 2.4rem;
+            padding-bottom: 4rem;
+            padding-left: 2.4rem;
+        }
+
+        [data-testid="stVerticalBlock"] {
+            gap: 0.85rem;
+        }
+
+
+        /* -----------------------------------------------------------
+           Typography
+           ----------------------------------------------------------- */
+
+        h1,
+        h2,
+        h3 {
+            color: var(--momentum-ink);
+            letter-spacing: -0.025em;
+        }
+
+        h1 {
+            font-size: clamp(2.15rem, 3vw, 3.35rem);
+            font-weight: 760;
+            line-height: 1.04;
+            margin-bottom: 0.7rem;
+        }
+
+        h2 {
+            font-size: clamp(1.45rem, 2vw, 1.9rem);
+            font-weight: 720;
+            line-height: 1.18;
+            margin-top: 0.25rem;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        p,
+        li {
+            color: #334155;
+            line-height: 1.65;
+        }
+
+        strong {
+            color: var(--momentum-ink);
+            font-weight: 700;
+        }
+
+        [data-testid="stCaptionContainer"] {
+            color: var(--momentum-muted);
+            line-height: 1.55;
+        }
+
+
+        /* -----------------------------------------------------------
+           Dividers
+           ----------------------------------------------------------- */
+
+        hr {
+            margin-top: 1.6rem;
+            margin-bottom: 1.6rem;
+            border: none;
+            border-top: 1px solid var(--momentum-border);
+        }
+
+
+        /* -----------------------------------------------------------
+           Sidebar foundation
+           ----------------------------------------------------------- */
+
+        [data-testid="stSidebar"] {
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.98) 0%,
+                    rgba(248, 250, 252, 0.98) 100%
+                );
+            border-right: 1px solid var(--momentum-border);
+        }
+
+        [data-testid="stSidebar"] > div:first-child {
+            padding-top: 1.75rem;
+        }
+
+        [data-testid="stSidebar"] h2,
+        [data-testid="stSidebar"] h3 {
+            letter-spacing: -0.015em;
+        }
+
+        [data-testid="stSidebar"] label {
+            color: #334155;
+            font-weight: 620;
+        }
+
+
+        /* -----------------------------------------------------------
+           Form controls
+           ----------------------------------------------------------- */
+
+        [data-baseweb="select"] > div {
+            min-height: 2.75rem;
+            background: rgba(255, 255, 255, 0.96);
+            border-color: var(--momentum-border);
+            border-radius: 10px;
+            transition:
+                border-color 160ms ease,
+                box-shadow 160ms ease;
+        }
+
+        [data-baseweb="select"] > div:hover {
+            border-color: #A5B4FC;
+        }
+
+        [data-baseweb="select"] > div:focus-within {
+            border-color: var(--momentum-indigo);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.11);
+        }
+
+
+        /* -----------------------------------------------------------
+           Accessible keyboard focus
+           ----------------------------------------------------------- */
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible {
+            outline: 3px solid rgba(99, 102, 241, 0.32);
+            outline-offset: 2px;
+        }
+
+
+        /* -----------------------------------------------------------
+           Responsive layout
+           ----------------------------------------------------------- */
+
+        @media (max-width: 900px) {
+            .main .block-container {
+                padding-top: 1.5rem;
+                padding-right: 1.1rem;
+                padding-left: 1.1rem;
+            }
+
+            h1 {
+                font-size: 2.1rem;
+            }
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# -------------------------------------------------------------------
+# Hero and KPI presentation
+# -------------------------------------------------------------------
+
+st.html(
+    """
+    <style>
+        /* -----------------------------------------------------------
+           Momentum Signal Brief hero
+           ----------------------------------------------------------- */
+
+        .momentum-hero {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.7rem;
+            padding: clamp(1.5rem, 3vw, 2.5rem);
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.98) 0%,
+                    rgba(245, 247, 255, 0.98) 58%,
+                    rgba(238, 252, 255, 0.96) 100%
+                );
+            border: 1px solid rgba(203, 213, 225, 0.88);
+            border-radius: 24px;
+            box-shadow:
+                0 18px 45px rgba(15, 23, 42, 0.07),
+                0 2px 8px rgba(15, 23, 42, 0.035);
+        }
+
+        .momentum-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(
+                    rgba(99, 102, 241, 0.055) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(99, 102, 241, 0.055) 1px,
+                    transparent 1px
+                );
+            background-size: 34px 34px;
+            mask-image:
+                linear-gradient(
+                    90deg,
+                    transparent 8%,
+                    rgba(0, 0, 0, 0.3) 58%,
+                    rgba(0, 0, 0, 0.8) 100%
+                );
+            pointer-events: none;
+        }
+
+        .momentum-hero::after {
+            content: "";
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            top: -210px;
+            right: -80px;
+            border: 1px solid rgba(99, 102, 241, 0.17);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 48px rgba(99, 102, 241, 0.035),
+                0 0 0 96px rgba(34, 211, 238, 0.025);
+            pointer-events: none;
+        }
+
+        .momentum-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .momentum-hero-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.35rem;
+        }
+
+        .momentum-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            color: #4F46E5;
+            font-size: 0.73rem;
+            font-weight: 760;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .momentum-eyebrow-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--momentum-cyan);
+            border: 2px solid rgba(34, 211, 238, 0.22);
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(34, 211, 238, 0.1);
+        }
+
+        .momentum-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.46rem 0.72rem;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(203, 213, 225, 0.92);
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 650;
+            white-space: nowrap;
+        }
+
+        .momentum-status-badge::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: var(--momentum-indigo);
+            border-radius: 50%;
+        }
+
+        .momentum-hero-main {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(260px, 0.36fr);
+            align-items: end;
+            gap: 2.5rem;
+        }
+
+        .momentum-hero-title {
+            max-width: 850px;
+            margin: 0;
+            color: var(--momentum-ink);
+            font-size: clamp(2.25rem, 4vw, 4rem);
+            font-weight: 780;
+            line-height: 1.02;
+            letter-spacing: -0.045em;
+        }
+
+        .momentum-hero-title span {
+            color: var(--momentum-indigo);
+        }
+
+        .momentum-hero-description {
+            max-width: 780px;
+            margin: 1rem 0 0;
+            color: #475569;
+            font-size: clamp(0.97rem, 1.2vw, 1.08rem);
+            line-height: 1.65;
+        }
+
+        .momentum-lens {
+            padding: 1rem 1.05rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(203, 213, 225, 0.86);
+            border-radius: 15px;
+        }
+
+        .momentum-lens-label {
+            display: block;
+            margin-bottom: 0.35rem;
+            color: #64748B;
+            font-size: 0.66rem;
+            font-weight: 750;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .momentum-lens strong {
+            display: block;
+            color: var(--momentum-ink);
+            font-size: 0.93rem;
+            line-height: 1.45;
+        }
+
+        .momentum-signal-track {
+            display: flex;
+            align-items: center;
+            margin-top: 0.9rem;
+        }
+
+        .momentum-signal-line {
+            height: 2px;
+            flex: 1;
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--momentum-indigo),
+                    var(--momentum-violet),
+                    var(--momentum-cyan)
+                );
+        }
+
+        .momentum-signal-node {
+            width: 9px;
+            height: 9px;
+            margin: 0 -1px;
+            background: #FFFFFF;
+            border: 2px solid var(--momentum-indigo);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .momentum-signal-node:last-child {
+            border-color: var(--momentum-cyan);
+        }
+
+        .momentum-hero-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-top: 1.55rem;
+            padding-top: 1.1rem;
+            color: #475569;
+            border-top: 1px solid rgba(203, 213, 225, 0.82);
+            font-size: 0.82rem;
+            line-height: 1.55;
+        }
+
+        .momentum-note-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 22px;
+            width: 22px;
+            height: 22px;
+            color: #4F46E5;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 7px;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+
+        /* -----------------------------------------------------------
+           KPI section
+           ----------------------------------------------------------- */
+
+        .momentum-section-intro {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 0.3rem 0 0.85rem;
+        }
+
+        .momentum-section-kicker {
+            color: #4F46E5;
+            font-size: 0.69rem;
+            font-weight: 760;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .momentum-section-note {
+            color: #64748B;
+            font-size: 0.78rem;
+            text-align: right;
+        }
+
+        .momentum-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .momentum-kpi-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 148px;
+            padding: 1.05rem 1.1rem 1rem;
+            background: rgba(255, 255, 255, 0.93);
+            border: 1px solid rgba(203, 213, 225, 0.84);
+            border-radius: 17px;
+            box-shadow: 0 7px 22px rgba(15, 23, 42, 0.045);
+        }
+
+        .momentum-kpi-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 3px;
+            background: var(--card-accent);
+        }
+
+        .momentum-kpi-card::after {
+            content: "";
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            top: -43px;
+            right: -31px;
+            background: var(--card-glow);
+            border-radius: 50%;
+        }
+
+        .momentum-kpi-indigo {
+            --card-accent: var(--momentum-indigo);
+            --card-glow: rgba(99, 102, 241, 0.09);
+        }
+
+        .momentum-kpi-violet {
+            --card-accent: var(--momentum-violet);
+            --card-glow: rgba(139, 92, 246, 0.09);
+        }
+
+        .momentum-kpi-cyan {
+            --card-accent: var(--momentum-cyan);
+            --card-glow: rgba(34, 211, 238, 0.1);
+        }
+
+        .momentum-kpi-gold {
+            --card-accent: var(--momentum-gold);
+            --card-glow: rgba(234, 179, 8, 0.09);
+        }
+
+        .momentum-kpi-topline {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.82rem;
+        }
+
+        .momentum-kpi-label {
+            color: #64748B;
+            font-size: 0.68rem;
+            font-weight: 730;
+            letter-spacing: 0.08em;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        .momentum-kpi-index {
+            color: #94A3B8;
+            font-size: 0.66rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+        }
+
+        .momentum-kpi-value {
+            color: var(--momentum-ink);
+            font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+            font-weight: 745;
+            line-height: 1.08;
+            letter-spacing: -0.035em;
+        }
+
+        .momentum-kpi-value-repository {
+            font-size: clamp(1.05rem, 1.65vw, 1.48rem);
+            line-height: 1.22;
+            overflow-wrap: anywhere;
+        }
+
+        .momentum-kpi-context {
+            margin-top: 0.68rem;
+            color: #64748B;
+            font-size: 0.75rem;
+            line-height: 1.45;
+        }
+
+
+        /* -----------------------------------------------------------
+           Responsive hero and KPI layouts
+           ----------------------------------------------------------- */
+
+        @media (max-width: 1050px) {
+            .momentum-hero-main {
+                grid-template-columns: 1fr;
+                gap: 1.3rem;
+            }
+
+            .momentum-lens {
+                max-width: 480px;
+            }
+
+            .momentum-kpi-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            .momentum-hero {
+                padding: 1.3rem;
+                border-radius: 18px;
+            }
+
+            .momentum-hero-topline,
+            .momentum-section-intro {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .momentum-section-note {
+                text-align: left;
+            }
+
+            .momentum-status-badge {
+                white-space: normal;
+            }
+
+            .momentum-kpi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+                /* -----------------------------------------------------------
+           Evidence navigation and chart panels
+           ----------------------------------------------------------- */
+
+        .momentum-evidence-intro {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-top: 2.4rem;
+            margin-bottom: 0.8rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--momentum-border);
+        }
+
+        .momentum-evidence-kicker {
+            margin-bottom: 0.35rem;
+            color: #4F46E5;
+            font-size: 0.69rem;
+            font-weight: 760;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+
+        .momentum-evidence-title {
+            margin: 0;
+            color: var(--momentum-ink);
+            font-size: clamp(1.35rem, 2vw, 1.75rem);
+            font-weight: 735;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+
+        .momentum-evidence-description {
+            max-width: 520px;
+            margin: 0;
+            color: #64748B;
+            font-size: 0.8rem;
+            line-height: 1.55;
+            text-align: right;
+        }
+
+
+        /* Remove automatic heading-link icons. */
+
+        [data-testid="stHeaderActionElements"] {
+            display: none;
+        }
+
+        /* -----------------------------------------------------------
+           Native Streamlit tabs
+           ----------------------------------------------------------- */
+
+        div[data-testid="stTabs"] {
+            margin-top: 0.45rem;
+        }
+
+        div[data-testid="stTabs"] div[role="tabpanel"] {
+            padding-top: 0.7rem;
+        }
+
+
+        /* -----------------------------------------------------------
+           Plotly evidence panels
+           ----------------------------------------------------------- */
+
+        [data-testid="stPlotlyChart"] {
+            overflow: visible;
+            margin-top: 0.7rem;
+            padding: 0.5rem 0.6rem 0.75rem;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(203, 213, 225, 0.86);
+            border-radius: 18px;
+            box-shadow:
+                0 10px 30px rgba(15, 23, 42, 0.045),
+                0 2px 6px rgba(15, 23, 42, 0.025);
+        }
+
+
+        /* -----------------------------------------------------------
+           Analytical takeaway notes
+           ----------------------------------------------------------- */
+
+        div[role="tabpanel"]
+        [data-testid="stCaptionContainer"] {
+            margin-top: 0.55rem;
+            padding: 0.8rem 0.95rem;
+            color: #475569;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(99, 102, 241, 0.075),
+                    rgba(34, 211, 238, 0.035)
+                );
+            border-left: 3px solid var(--momentum-indigo);
+            border-radius: 0 10px 10px 0;
+            font-size: 0.78rem;
+            line-height: 1.55;
+        }
+
+
+        /* -----------------------------------------------------------
+           Responsive evidence introduction
+           ----------------------------------------------------------- */
+
+        @media (max-width: 800px) {
+            .momentum-evidence-intro {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 0.55rem;
+            }
+
+            .momentum-evidence-description {
+                text-align: left;
+            }
+        }
+         
+    </style>
+    """
+)
 
 # Find the main repository folder.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -45,19 +807,72 @@ normalized_df, radar_df = load_data()
 
 
 # Dashboard title and introduction.
-st.title("GitHub Repository Momentum Dashboard")
+# -------------------------------------------------------------------
+# Momentum Signal Brief hero
+# -------------------------------------------------------------------
 
-st.markdown(
+st.html(
     """
-    Explore repository-level momentum using recent commit growth,
-    contributor participation, normalized score components, and
-    percentile-based discovery zones.
-    """
-)
+    <section class="momentum-hero">
+        <div class="momentum-hero-content">
 
-st.info(
-    "Exploratory portfolio prototype based on historical public GitHub "
-    "sample commit data — not a production GitHub ranking system."
+            <div class="momentum-hero-topline">
+                <div class="momentum-eyebrow">
+                    <span class="momentum-eyebrow-dot"></span>
+                    Developer intelligence brief
+                </div>
+
+                <div class="momentum-status-badge">
+                    Fixed historical sample
+                </div>
+            </div>
+
+            <div class="momentum-hero-main">
+                <div>
+                    <h1 class="momentum-hero-title">
+                        GitHub Repository
+                        <span>Momentum Dashboard</span>
+                    </h1>
+
+                    <p class="momentum-hero-description">
+                        Explore which repositories show momentum, what
+                        supports their scores, and how growth and contributor
+                        signals shape their discovery position.
+                    </p>
+                </div>
+
+                <div class="momentum-lens">
+                    <span class="momentum-lens-label">
+                        Analytical lens
+                    </span>
+
+                    <strong>
+                        Growth · Recent activity · Contributors
+                    </strong>
+
+                    <div class="momentum-signal-track">
+                        <span class="momentum-signal-node"></span>
+                        <span class="momentum-signal-line"></span>
+                        <span class="momentum-signal-node"></span>
+                        <span class="momentum-signal-line"></span>
+                        <span class="momentum-signal-node"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="momentum-hero-note">
+                <span class="momentum-note-mark">i</span>
+
+                <span>
+                    Exploratory portfolio prototype based on historical
+                    public GitHub sample commit data — not a production
+                    GitHub ranking system.
+                </span>
+            </div>
+
+        </div>
+    </section>
+    """
 )
 
 
@@ -200,44 +1015,138 @@ new_emerging_count = filtered_normalized_df.loc[
 ].nunique()
 
 
-kpi_row_1_col_1, kpi_row_1_col_2 = st.columns(2)
-
-with kpi_row_1_col_1:
-    st.metric(
-        label="Repositories Analyzed",
-        value=repositories_analyzed,
-    )
-
-with kpi_row_1_col_2:
-    st.metric(
-        label="Highest Momentum Repository",
-        value=highest_momentum_repository,
-    )
+average_momentum_display = (
+    f"{average_momentum_score:.2f}"
+    if average_momentum_score is not None
+    else "—"
+)
 
 
-kpi_row_2_col_1, kpi_row_2_col_2 = st.columns(2)
+st.html(
+    """
+    <div class="momentum-section-intro">
+        <div class="momentum-section-kicker">
+            Signal summary
+        </div>
 
-with kpi_row_2_col_1:
-    st.metric(
-        label="Average Momentum Score",
-        value=(
-            f"{average_momentum_score:.2f}"
-            if average_momentum_score is not None
-            else "—"
-        ),
-    )
+        <div class="momentum-section-note">
+            Updates with repository and activity-status filters
+        </div>
+    </div>
+    """
+)
 
-with kpi_row_2_col_2:
-    st.metric(
-        label="New/Emerging Repositories",
-        value=new_emerging_count,
-    )
+
+st.html(
+    f"""
+    <section class="momentum-kpi-grid">
+
+        <article class="momentum-kpi-card momentum-kpi-indigo">
+            <div class="momentum-kpi-topline">
+                <span class="momentum-kpi-label">
+                    Repositories analyzed
+                </span>
+
+                <span class="momentum-kpi-index">01</span>
+            </div>
+
+            <div class="momentum-kpi-value">
+                {repositories_analyzed}
+            </div>
+
+            <div class="momentum-kpi-context">
+                Repositories visible in the current momentum view
+            </div>
+        </article>
+
+
+        <article class="momentum-kpi-card momentum-kpi-violet">
+            <div class="momentum-kpi-topline">
+                <span class="momentum-kpi-label">
+                    Highest momentum repository
+                </span>
+
+                <span class="momentum-kpi-index">02</span>
+            </div>
+
+            <div class="
+                momentum-kpi-value
+                momentum-kpi-value-repository
+            ">
+                {highest_momentum_repository}
+            </div>
+
+            <div class="momentum-kpi-context">
+                Highest finalized normalized score within current filters
+            </div>
+        </article>
+
+
+        <article class="momentum-kpi-card momentum-kpi-cyan">
+            <div class="momentum-kpi-topline">
+                <span class="momentum-kpi-label">
+                    Average momentum score
+                </span>
+
+                <span class="momentum-kpi-index">03</span>
+            </div>
+
+            <div class="momentum-kpi-value">
+                {average_momentum_display}
+            </div>
+
+            <div class="momentum-kpi-context">
+                Mean score across the visible repository set
+            </div>
+        </article>
+
+
+        <article class="momentum-kpi-card momentum-kpi-gold">
+            <div class="momentum-kpi-topline">
+                <span class="momentum-kpi-label">
+                    New / Emerging repositories
+                </span>
+
+                <span class="momentum-kpi-index">04</span>
+            </div>
+
+            <div class="momentum-kpi-value">
+                {new_emerging_count}
+            </div>
+
+            <div class="momentum-kpi-context">
+                Repositories without a usable prior-period baseline
+            </div>
+        </article>
+
+    </section>
+    """
+)
 
     # -------------------------------------------------------------------
 # Dashboard chart tabs
 # -------------------------------------------------------------------
 
-st.divider()
+st.html(
+    """
+    <section class="momentum-evidence-intro">
+        <div>
+            <div class="momentum-evidence-kicker">
+                Evidence views
+            </div>
+
+            <h2 class="momentum-evidence-title">
+                Follow the momentum signal
+            </h2>
+        </div>
+
+        <p class="momentum-evidence-description">
+            Move from repository ranking to driver explanation,
+            score composition, and discovery-zone classification.
+        </p>
+    </section>
+    """
+)
 
 ranking_tab, drivers_tab, fingerprint_tab, discovery_tab = st.tabs(
     [
@@ -338,9 +1247,15 @@ with ranking_tab:
                 "orientation": "h",
                 "yanchor": "bottom",
                 "y": 1.02,
-                "xanchor": "right",
-                "x": 1,
+                "xanchor": "left",
+                "x": 0,
+                "itemsizing": "constant",
+                "bgcolor": "rgba(0, 0, 0, 0)",
+                "font": {
+                    "size": 11,
+                    "color": "#475569",
             },
+        },
             margin={
                 "l": 20,
                 "r": 70,
@@ -593,9 +1508,9 @@ with discovery_tab:
     st.subheader("Repository Discovery Zone Matrix")
 
     st.write(
-        "This view classifies repositories using their relative growth "
-        "and contributor percentiles. The dashed lines represent the "
-        "50th-percentile thresholds used in the finalized zone logic."
+        "This view classifies repositories using relative growth and "
+        "contributor percentiles. The reference lines mark the finalized "
+        "50th-percentile discovery-zone thresholds."
     )
 
     if filtered_radar_df.empty:
@@ -618,17 +1533,17 @@ with discovery_tab:
         )
 
         radar_zone_colors = {
-            "Momentum Leader": "#FFD700",
-            "Growing Candidate": "#14B8A6",
-            "Stable Monitor": "#BDE063",
-            "Watchlist": "#A8D5FF",
+            "Momentum Leader": "#F2B84B",
+            "Growing Candidate": "#2A9D8F",
+            "Stable Monitor": "#849B78",
+            "Watchlist": "#5969C9",
         }
 
         radar_zone_symbols = {
             "Momentum Leader": "star",
             "Growing Candidate": "triangle-up",
             "Stable Monitor": "diamond",
-            "Watchlist": "circle-open",
+            "Watchlist": "circle",
         }
 
         discovery_figure = px.scatter(
@@ -660,127 +1575,218 @@ with discovery_tab:
             },
         )
 
-                # Add subtle background shading for the four discovery zones.
-        # These rectangles are visual guides only; they do not change
-        # the data or the classification logic.
-
-        # Watchlist: lower growth and lower contributor strength
-        discovery_figure.add_shape(
-            type="rect",
-            x0=-0.05,
-            x1=0.5,
-            y0=-0.05,
-            y1=0.5,
-            fillcolor="#A8D5FF",
-            opacity=0.12,
-            line_width=0,
-            layer="below",
-        )
-
-        # Stable Monitor: lower growth and higher contributor strength
-        discovery_figure.add_shape(
-            type="rect",
-            x0=0.5,
-            x1=1.05,
-            y0=-0.05,
-            y1=0.5,
-            fillcolor="#BDE063",
-            opacity=0.12,
-            line_width=0,
-            layer="below",
-        )
-
-        # Growing Candidate: higher growth and lower contributor strength
-        discovery_figure.add_shape(
-            type="rect",
-            x0=-0.05,
-            x1=0.5,
-            y0=0.5,
-            y1=1.05,
-            fillcolor="#14B8A6",
-            opacity=0.10,
-            line_width=0,
-            layer="below",
-        )
-
-        # Momentum Leader: higher growth and higher contributor strength
-        discovery_figure.add_shape(
-            type="rect",
-            x0=0.5,
-            x1=1.05,
-            y0=0.5,
-            y1=1.05,
-            fillcolor="#FFD700",
-            opacity=0.12,
-            line_width=0,
-            layer="below",
-        )
-
-
-        # These two lines reproduce the 50th-percentile
-        # thresholds used in the SQL classification logic.
+        # Finalized 50th-percentile classification thresholds.
         discovery_figure.add_vline(
             x=0.5,
-            line_width=1,
-            line_dash="dash",
-            line_color="#64748B",
+            line_width=1.5,
+            line_dash="solid",
+            line_color="rgba(99, 102, 241, 0.28)",
         )
 
         discovery_figure.add_hline(
             y=0.5,
-            line_width=1,
-            line_dash="dash",
-            line_color="#64748B",
+            line_width=1.5,
+            line_dash="solid",
+            line_color="rgba(99, 102, 241, 0.28)",
         )
 
-        discovery_figure.update_traces(
-            textposition="top center",
-            marker={
-                "size": 15,
-                "opacity": 0.88,
-                "line": {
-                    "width": 1,
-                    "color": "#475569",
-                },
+        # Consistently positioned quadrant labels.
+        quadrant_labels = [
+            {
+                "x": 0.035,
+                "y": 0.965,
+                "text": "GROWING CANDIDATE",
+                "xanchor": "left",
+                "yanchor": "top",
             },
-            hovertemplate=(
-                "<b>%{customdata[0]}</b><br>"
-                "Discovery zone: %{customdata[1]}<br>"
-                "Growth percentile: %{customdata[2]:.1%}<br>"
-                "Contributor percentile: %{customdata[3]:.1%}<br>"
-                "Radar score: %{customdata[4]:.2f}<br>"
-                "Growth rate: %{customdata[5]}<br>"
-                "Contributors: %{customdata[6]:,.0f}"
-                "<extra></extra>"
-            ),
-        )
+            {
+                "x": 0.965,
+                "y": 0.965,
+                "text": "MOMENTUM LEADER",
+                "xanchor": "right",
+                "yanchor": "top",
+            },
+            {
+                "x": 0.035,
+                "y": 0.465,
+                "text": "WATCHLIST",
+                "xanchor": "left",
+                "yanchor": "top",
+            },
+            {
+                "x": 0.965,
+                "y": 0.465,
+                "text": "STABLE MONITOR",
+                "xanchor": "right",
+                "yanchor": "top",
+            },
+        ]
+
+        for label in quadrant_labels:
+            discovery_figure.add_annotation(
+                x=label["x"],
+                y=label["y"],
+                text=f"<b>{label['text']}</b>",
+                xanchor=label["xanchor"],
+                yanchor=label["yanchor"],
+                showarrow=False,
+                font={
+                    "size": 10,
+                    "color": "#5B6780",
+                },
+                bgcolor="rgba(248, 250, 252, 0.94)",
+                bordercolor="rgba(203, 213, 225, 0.95)",
+                borderwidth=1,
+                borderpad=5,
+                opacity=0.96,
+            )
+
+        zone_marker_styles = {
+            "Momentum Leader": {
+                "size": 28,
+                "border_color": "#8A5A00",
+            },
+            "Growing Candidate": {
+                "size": 23,
+                "border_color": "#0B5F57",
+            },
+            "Stable Monitor": {
+                "size": 23,
+                "border_color": "#506247",
+            },
+            "Watchlist": {
+                "size": 22,
+                "border_color": "#35428F",
+            },
+        }
+
+        for trace in discovery_figure.data:
+            zone_name = trace.name
+            marker_style = zone_marker_styles[zone_name]
+
+            trace.update(
+                textposition="top center",
+                textfont={
+                    "size": 12,
+                    "color": "#172033",
+                },
+                cliponaxis=False,
+                marker={
+                    "size": marker_style["size"],
+                    "color": radar_zone_colors[zone_name],
+                    "opacity": 1,
+                    "line": {
+                        "width": 2.2,
+                        "color": marker_style["border_color"],
+                    },
+                },
+                hovertemplate=(
+                    "<b>%{customdata[0]}</b><br>"
+                    "Discovery zone: %{customdata[1]}<br>"
+                    "Growth percentile: %{customdata[2]:.1%}<br>"
+                    "Contributor percentile: %{customdata[3]:.1%}<br>"
+                    "Radar score: %{customdata[4]:.2f}<br>"
+                    "Growth rate: %{customdata[5]}<br>"
+                    "Contributors: %{customdata[6]:,.0f}"
+                    "<extra></extra>"
+                ),
+            )
 
         discovery_figure.update_xaxes(
-            range=[-0.05, 1.05],
-            tickformat=".0%",
+            range=[-0.03, 1.03],
+            tickvals=[0, 0.25, 0.5, 0.75, 1],
+            ticktext=["0%", "25%", "50%", "75%", "100%"],
+            title_text="<b>Contributor Strength Percentile</b>",
+            showgrid=False,
+            zeroline=False,
+            showline=True,
+            linecolor="#CBD5E1",
+            linewidth=1.2,
+            ticks="outside",
+            ticklen=5,
+            tickcolor="#94A3B8",
+            tickfont={
+                "size": 11,
+                "color": "#64748B",
+            },
+            title_font={
+                "size": 15,
+                "color": "#253047",
+            },
+            automargin=True,
+            title_standoff=12,
         )
 
         discovery_figure.update_yaxes(
-            range=[-0.05, 1.05],
-            tickformat=".0%",
+            range=[-0.03, 1.05],
+            tickvals=[0, 0.25, 0.5, 0.75, 1],
+            ticktext=["0%", "25%", "50%", "75%", "100%"],
+            title_text="<b>Growth Momentum Percentile</b>",
+            showgrid=False,
+            zeroline=False,
+            showline=True,
+            linecolor="#CBD5E1",
+            linewidth=1.2,
+            ticks="outside",
+            ticklen=5,
+            tickcolor="#94A3B8",
+            tickfont={
+                "size": 11,
+                "color": "#64748B",
+            },
+            title_font={
+                "size": 15,
+                "color": "#253047",
+            },
+            automargin=True,
+            title_standoff=12,
         )
 
         discovery_figure.update_layout(
-            height=620,
+            height=550,
             template="plotly_white",
-            legend_title="Discovery Zone",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+            plot_bgcolor="#FCFDFE",
+            font={
+                "family": "Inter, Arial, sans-serif",
+                "color": "#334155",
+                "size": 12,
+            },
+            legend_title={
+                "text": "<b>DISCOVERY ZONES</b>",
+                "font": {
+                    "size": 10,
+                    "color": "#64748B",
+                },
+            },
             legend={
                 "orientation": "h",
                 "yanchor": "bottom",
-                "y": 1.02,
-                "xanchor": "right",
-                "x": 1,
+                "y": 1.06,
+                "xanchor": "left",
+                "x": 0,
+                "itemsizing": "constant",
+                "bgcolor": "rgba(255, 255, 255, 0.98)",
+                "bordercolor": "#D8E0EC",
+                "borderwidth": 1,
+                "font": {
+                    "size": 11,
+                    "color": "#334155",
+                },
+            },
+            hoverlabel={
+                "bgcolor": "#0F172A",
+                "bordercolor": "#0F172A",
+                "font": {
+                    "color": "#FFFFFF",
+                    "size": 12,
+                },
             },
             margin={
-                "l": 20,
-                "r": 30,
-                "t": 90,
-                "b": 50,
+                "l": 80,
+                "r": 45,
+                "t": 100,
+                "b": 80,
             },
         )
 
@@ -789,18 +1795,20 @@ with discovery_tab:
             width="stretch",
             config={
                 "displaylogo": False,
+                "displayModeBar": False,
+                "responsive": True,
             },
         )
 
         st.caption(
-    "The discovery zones are relative classifications within this "
-    "historical sample window. Repositories without a prior-period "
-    "baseline are treated as New/Emerging and may receive an imputed "
-    "top growth percentile, so zone placement should be interpreted "
-    "cautiously."
-)
+            "The discovery zones are relative classifications within this "
+            "historical sample window. Repositories without a prior-period "
+            "baseline are treated as New/Emerging and may receive an imputed "
+            "top growth percentile, so zone placement should be interpreted "
+            "cautiously."
+        )
 
-        # -------------------------------------------------------------------
+# -------------------------------------------------------------------
 # Interpretation and limitations
 # -------------------------------------------------------------------
 
