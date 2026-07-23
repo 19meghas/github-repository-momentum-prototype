@@ -42,7 +42,7 @@ The project builds a repository-level momentum prototype that:
 
 ---
 
-## Dashboard Preview
+## Notebook Analysis Preview
 
 ### 1. Repository Momentum Ranking
 
@@ -77,6 +77,9 @@ This matrix classifies repositories into discovery zones based on growth momentu
 ---
 
 ## Analytical Framework
+
+- **Data source:** `bigquery-public-data.github_repos.sample_commits`
+- **Fixed analysis date:** `2016-06-22`
 
 The project follows a staged SQL-based analytical workflow.
 
@@ -116,6 +119,16 @@ Repositories are classified using percentile-based thresholds:
 - high growth + lower contributor strength → Growing Candidate,
 - lower growth + high contributor strength → Stable Monitor,
 - lower growth + lower contributor strength → Watchlist.
+
+This classification is separate from the finalized normalized momentum score.
+Charts 1–3 rank and explain repositories using weighted growth, recent
+activity, and contributor components, while Chart 4 creates a percentile-based
+segmentation using growth momentum and contributor strength.
+
+For repositories without a usable prior-period baseline, the discovery query
+applies an adjusted growth value before percentile ranking. This is why
+`twbs/bootstrap` requires cautious interpretation despite appearing in the
+Momentum Leader zone.
 
 This creates an exploratory discovery layer that is easier to interpret than a single ranking alone.
 
@@ -175,6 +188,21 @@ Together, these views move from ranking to explanation to classification.
 - Normalization makes repositories easier to compare across different activity levels.
 - Discovery zones provide an interpretable portfolio-style view of repository activity.
 
+
+### Selected Findings
+
+- `tensorflow/tensorflow` records the highest finalized normalized momentum
+  score in the sample at `0.76`, supported primarily by its strong growth
+  component.
+- `Microsoft/vscode` ranks second at `0.53`, combining positive growth with
+  substantial recent activity.
+- `torvalds/linux` has the broadest contributor base in the comparison set,
+  but sharply negative short-term growth lowers its final momentum score.
+- `twbs/bootstrap` is classified as New/Emerging because it lacks a usable
+  prior-period baseline. Its Momentum Leader discovery-zone placement partly
+  reflects an imputed top growth percentile and should therefore be interpreted
+  cautiously.
+
 ---
 
 ## Scope and Limitations
@@ -213,14 +241,10 @@ Potential extensions include:
 
 ## Current Status
 
-The repository momentum analysis, notebook-based dashboard prototype, and interactive Streamlit dashboard v1 are complete.
+The repository momentum analysis, SQL workflow, notebook prototype, and
+redesigned interactive Streamlit dashboard are complete.
 
-The Streamlit application loads the finalized processed CSV outputs locally and provides:
-
-- filter-responsive KPI summaries
-- repository, activity-status, and radar-zone filters
-- four interactive Plotly visualizations
-- dashboard interpretation and documented limitations
+The dashboard has been validated locally and is ready for public deployment.
 
 Run the dashboard locally with:
 

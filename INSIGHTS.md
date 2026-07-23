@@ -32,11 +32,58 @@ Normalization helps compare repositories across different activity levels by con
 
 ---
 
-## 5. Discovery Views Are Useful for Exploration
+## 5. Discovery Zones Add a Different Analytical Lens
 
-The repository discovery zone matrix is not a final ranking system.
+The repository discovery zone matrix is not another version of the finalized momentum ranking.
 
-It is a visual exploration layer that helps separate momentum leaders, growing candidates, stable monitors, and watchlist repositories.
+Charts 1–3 use the normalized momentum score and its weighted growth, recent activity, and contributor components. Chart 4 instead uses growth-momentum percentile and contributor-strength percentile to place repositories into four relative discovery zones.
+
+This distinction allows the matrix to separate different repository profiles: Momentum Leaders, Growing Candidates, Stable Monitors, and Watchlist repositories.
+
+The classifications are relative to this small historical comparison set and should not be interpreted as absolute judgments about repository quality, importance, or long-term potential.
+
+---
+
+## 6. Selected Repository Findings
+
+### TensorFlow Shows the Strongest Finalized Momentum Result
+
+`tensorflow/tensorflow` records the highest finalized normalized momentum
+score in the sample at `0.76`.
+
+Its position is supported primarily by strong positive growth, alongside
+meaningful recent activity and contributor participation. This makes
+TensorFlow the strongest headline momentum result in the finalized ranking.
+
+### Visual Studio Code Ranks Second
+
+`Microsoft/vscode` records the second-highest normalized momentum score at
+`0.53`.
+
+Its result combines positive recent growth with substantial repository
+activity, showing that momentum can be supported by both acceleration and
+continued participation rather than by growth alone.
+
+### Linux Demonstrates That Scale Is Not the Same as Momentum
+
+`torvalds/linux` has the broadest contributor base among the repositories in
+the comparison set.
+
+However, its sharply negative short-term growth lowers its finalized momentum
+score. This illustrates an important analytical distinction: a large and
+established repository can demonstrate substantial ecosystem strength without
+showing strong momentum during the selected analysis window.
+
+### Bootstrap Requires Cautious Interpretation
+
+`twbs/bootstrap` is classified as New/Emerging because it does not have a
+usable previous-period baseline.
+
+Under the finalized discovery-zone logic, repositories without a prior-period
+baseline may receive an imputed top growth percentile. Bootstrap therefore
+appears in the Momentum Leader quadrant, but this placement should not be
+interpreted as unqualified evidence that it has the strongest observed
+momentum.
 
 ---
 
