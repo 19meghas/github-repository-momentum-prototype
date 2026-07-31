@@ -8,6 +8,13 @@ The goal is not to create a production-grade GitHub ranking system. Instead, thi
 
 ---
 
+## Live Dashboard
+
+Explore the interactive Repository Momentum Explorer:
+
+[Launch the Live Streamlit Dashboard](https://repository-momentum-explorer.streamlit.app)
+
+---
 
 ## Interactive Dashboard Preview
 
@@ -235,16 +242,17 @@ Potential extensions include:
 - adding repository topics and metadata,
 - expanding the analysis across multiple months,
 - tracking consistency and acceleration over time,
-- and deploying the Streamlit dashboard for public portfolio access.
+- extending the deployed dashboard with broader time-series coverage and additional repository signals.
 
 ---
 
 ## Current Status
 
-The repository momentum analysis, SQL workflow, notebook prototype, and
-redesigned interactive Streamlit dashboard are complete.
+The repository momentum analysis, SQL workflow, notebook prototype, and redesigned interactive Streamlit dashboard are complete.
 
-The dashboard has been validated locally and is ready for public deployment.
+The dashboard is publicly deployed on Streamlit Community Cloud:
+
+[Launch the Live Streamlit Dashboard](https://repository-momentum-explorer.streamlit.app)
 
 Run the dashboard locally with:
 
