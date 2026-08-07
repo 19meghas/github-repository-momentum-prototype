@@ -847,7 +847,7 @@ st.html(
                     </span>
 
                     <strong>
-                        Growth · Recent activity · Contributors
+                        Growth · Recent activity · Contributor breadth
                     </strong>
 
                     <div class="momentum-signal-track">
@@ -875,6 +875,207 @@ st.html(
     """
 )
 
+# -------------------------------------------------------------------
+# Momentum definition and scoring overview
+# -------------------------------------------------------------------
+
+st.html(
+    """
+    <style>
+        .momentum-definition {
+            margin: 0 0 1.5rem;
+            padding: 1.25rem 1.35rem 1.3rem;
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(203, 213, 225, 0.86);
+            border-radius: 18px;
+            box-shadow: 0 7px 22px rgba(15, 23, 42, 0.04);
+        }
+
+        .momentum-definition-kicker {
+            margin-bottom: 0.35rem;
+            color: #4F46E5;
+            font-size: 0.69rem;
+            font-weight: 760;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .momentum-definition-title {
+            margin: 0;
+            color: #0F172A;
+            font-size: 1.25rem;
+            font-weight: 720;
+            line-height: 1.3;
+        }
+
+        .momentum-definition-copy {
+            max-width: 1050px;
+            margin: 0.6rem 0 0;
+            color: #475569;
+            font-size: 0.9rem;
+            line-height: 1.65;
+        }
+
+        .momentum-definition-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .momentum-definition-item {
+            padding: 0.9rem 1rem;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+        }
+
+        .momentum-definition-item strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: #0F172A;
+            font-size: 0.88rem;
+        }
+
+        .momentum-definition-item span {
+            color: #64748B;
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 800px) {
+            .momentum-definition-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <section class="momentum-definition">
+        <div class="momentum-definition-kicker">
+            Metric definition
+        </div>
+
+        <h2 class="momentum-definition-title">
+            What does momentum mean in this dashboard?
+        </h2>
+
+        <p class="momentum-definition-copy">
+            Repository momentum describes the direction and strength of recent repository 
+            activity. In this prototype, it combines recent change in commit activity, 
+            current commit volume, and recent contributor breadth. Together, these 
+            signals help distinguish repositories showing stronger recent movement from 
+            those whose activity is more stable or weaker within the comparison set. The 
+            resulting score is comparative and exploratory; it is not a measure of repository 
+            quality, popularity, or long-term success.
+        </p>
+
+        <div class="momentum-definition-grid">
+
+            <div class="momentum-definition-item">
+                <strong>Growth · 50%</strong>
+                <span>
+                    Change in commit activity between the recent 30-day
+                    window and the preceding 30-day window.
+                </span>
+            </div>
+
+            <div class="momentum-definition-item">
+                <strong>Recent activity · 30%</strong>
+                <span>
+                    Number of commits recorded during the recent
+                    30-day analysis window.
+                </span>
+            </div>
+
+            <div class="momentum-definition-item">
+                <strong>Contributor breadth · 20%</strong>
+                <span>
+                    Number of distinct contributors active during the
+                    recent 30-day window.
+                </span>
+            </div>
+
+        </div>
+    </section>
+    """
+)
+
+with st.expander("How is the momentum score calculated?"):
+    st.markdown(
+        """
+        **1. Growth rate**
+
+        Growth compares commit activity in the recent 30-day period with
+        activity in the preceding 30-day period:
+
+        `((recent commits - previous commits) / previous commits) × 100`
+
+        **2. Normalize the signals**
+
+        Growth rate, recent commit activity, and recent distinct-contributor count operate 
+        on different scales. Each is therefore normalized relative to the maximum 
+        observed value in the comparison set before weighting.
+
+        **3. Apply the momentum weights**
+
+        - Growth: **50%**
+        - Recent activity: **30%**
+        - Contributor breadth: **20%**
+
+        `Momentum Score = Growth Component + Recent Activity Component + Contributor Component`
+
+        Growth receives the largest weight because the analytical question
+        focuses on momentum rather than repository size alone. Recent
+        activity confirms current activity, while contributor breadth adds
+        evidence of participation beyond commit volume.
+
+        Repositories without a usable prior-period baseline are labelled
+        **New/Emerging**. Their direct growth contribution is treated as zero
+        in the normalized momentum score.
+
+        The analysis also requires more than 20 commits in the recent
+        30-day window to reduce very small, noisy observations.
+        """
+    )
+
+with st.expander("What data does this dashboard use?"):
+    st.markdown(
+        """
+        **Data source**
+
+        `bigquery-public-data.github_repos.sample_commits`
+
+        This prototype is based on a historical public GitHub sample commit dataset
+        available through Google BigQuery. The dashboard uses processed analytical
+        outputs generated from the SQL analysis rather than querying BigQuery live.
+
+        **Fixed analysis cutoff:** June 22, 2016.
+
+        **Source fields used**
+
+        - **repo_name** — identifies the repository
+        - **commit** — used to count repository commit activity
+        - **committer.date** — used to place commits into the recent and previous 30-day periods
+        - **author.name** — used to derive distinct-contributor measures
+
+        **Derived analytical fields**
+
+        From those source attributes, the SQL creates:
+
+        - recent 30-day commits
+        - previous 30-day commits
+        - growth rate
+        - recent 30-day distinct-contributor count
+        - normalized score components
+        - momentum score
+        - observed contributor breadth across the available sample history
+        - growth-rate and observed-contributor-breadth percentiles
+        - discovery-zone classification
+
+        The current prototype does not use stars, forks, issues, pull requests,
+        topics, bot filtering, or broader repository metadata.
+        """
+    )
 
 # -------------------------------------------------------------------
 # Sidebar filters
@@ -931,12 +1132,12 @@ selected_activity_statuses = st.sidebar.multiselect(
 
 # Radar-zone filter: applies to discovery-radar data.
 selected_radar_zones = st.sidebar.multiselect(
-    "Radar Zone",
+    "Discovery Zone",
     options=radar_zone_options,
     default=[],
-    placeholder="All radar zones",
+    placeholder="All discovery zones",
     help=(
-        "Leave empty to show all radar zones, or select specific zones "
+        "Leave empty to show all discovery zones, or select specific zones "
         "to filter the discovery matrix."
     ),
 )
@@ -1077,7 +1278,7 @@ st.html(
             </div>
 
             <div class="momentum-kpi-context">
-                Highest finalized normalized score within current filters
+                Highest normalized momentum score within current filters
             </div>
         </article>
 
@@ -1165,10 +1366,20 @@ ranking_tab, drivers_tab, fingerprint_tab, discovery_tab = st.tabs(
 with ranking_tab:
     st.subheader("Repository Momentum Ranking")
 
-    st.write(
-        "Repositories ranked by the finalized normalized momentum score. "
-        "Colour represents the repository's activity status."
-    )
+    st.markdown(
+        """
+        Repositories are ranked by their **composite momentum score**, which combines
+        normalized growth, recent commit activity, and contributor breadth using the
+        weights defined above.
+        
+        **How to read this chart:** A longer bar represents a stronger combined momentum
+         signal within this comparison set. Scores above zero indicate that the positive 
+         contributions from growth, recent activity, and contributor breadth outweigh any 
+         negative growth contribution. Scores below zero indicate that declining growth is 
+         strong enough to outweigh the positive contributions from recent activity and 
+         contributor breadth. Bar colour indicates the repository's activity status.
+        """
+        )
 
     if filtered_normalized_df.empty:
         st.warning(
@@ -1237,11 +1448,18 @@ with ranking_tab:
             ),
         )
 
+        ranking_figure.add_vline(
+            x=0,
+            line_width=1.5,
+            line_dash="dash",
+            line_color="#94A3B8",
+        )
+
         ranking_figure.update_layout(
             height=560,
             template="plotly_white",
             xaxis_title="Normalized Momentum Score",
-            yaxis_title="",
+            yaxis_title="Repository",
             legend_title="Activity Status",
             legend={
                 "orientation": "h",
@@ -1254,8 +1472,8 @@ with ranking_tab:
                 "font": {
                     "size": 11,
                     "color": "#475569",
+                },
             },
-        },
             margin={
                 "l": 20,
                 "r": 70,
@@ -1274,6 +1492,8 @@ with ranking_tab:
             width="stretch",
             config={
                 "displaylogo": False,
+                "displayModeBar": False,
+                "responsive": True,
             },
         )
 
@@ -1293,10 +1513,30 @@ with ranking_tab:
 with drivers_tab:
     st.subheader("What Drives Repository Momentum?")
 
-    st.write(
-        "This view compares recent growth with contributor participation. "
-        "Bubble size represents the finalized momentum score."
-    )
+    st.markdown(
+            """
+            This view compares two of the main signals behind repository momentum:
+            **change in recent commit activity** and **contributor breadth**.
+
+            **How to read this chart:**
+
+            - **X-axis — Commit Growth Rate (%):** percentage change in commits between
+            the recent 30-day period and the preceding 30-day period. Values to the
+            right of zero indicate increasing activity; values to the left indicate
+            declining activity.
+            - **Y-axis — Distinct Contributors (Recent 30 Days):** number of distinct 
+            contributors observed during the recent 30-day period.
+            - **Bubble size — Momentum score:** larger bubbles represent higher composite
+            momentum scores within the comparison set.
+            - **Colour — Activity status:** shows whether a repository is classified as
+            Growing, Stable, or New/Emerging.
+
+            **New/Emerging repositories:** repositories without a usable prior-period
+            baseline are positioned at zero on the growth axis for visualization only.
+            This does not represent an observed 0% growth rate; their hover label identifies
+            them as New/Emerging.
+            """
+        )
 
     if filtered_normalized_df.empty:
         st.warning(
@@ -1361,8 +1601,8 @@ with drivers_tab:
                 "activity_status",
             ],
             labels={
-                "growth_rate_plot": "Recent 30-Day Growth Rate (%)",
-                "contributor_count": "Contributor Count",
+                "growth_rate_plot": "Commit Growth Rate (%)",
+                "contributor_count": "Distinct Contributors (Recent 30 Days)",
                 "activity_status": "Activity Status",
             },
         )
@@ -1415,22 +1655,41 @@ with drivers_tab:
             width="stretch",
             config={
                 "displaylogo": False,
+                "displayModeBar": False,
+                "responsive": True,
             },
         )
 
         st.caption(
             "Repositories to the right of the dashed line show positive "
-            "period-over-period growth. Contributor count adds context, "
-            "so growth is not interpreted in isolation."
+            "period-over-period growth. Recent distinct-contributor count adds "
+            "context, so growth is not interpreted in isolation."
         )
 
 with fingerprint_tab:
     st.subheader("Momentum Driver Fingerprint")
 
-    st.write(
-        "This heatmap shows how growth, recent activity, and contributor "
-        "participation contribute to each repository's momentum score."
-    )
+    st.markdown(
+            """
+            This heatmap breaks each repository's **final momentum score** into its
+            three weighted components: growth, recent activity, and contributor breadth.
+
+            **How to read this chart:**
+
+            - **Rows — Repositories:** each row represents one repository.
+            - **Columns — Momentum components:** Growth (50%), Recent Activity (30%),
+            and Contributor Breadth (20%).
+            - **Cell value — Weighted contribution:** the amount that each component
+            contributes to the repository's final momentum score after normalization
+            and weighting.
+            - **Colour intensity:** shows the direction and relative strength of each
+            contribution. Growth can contribute positively or negatively, while recent
+            activity and contributor breadth contribute positively.
+
+            The three component values across a repository's row add up to its
+            **final momentum score**.
+            """
+        )
 
     if filtered_normalized_df.empty:
         st.warning(
@@ -1455,9 +1714,9 @@ with fingerprint_tab:
             ]
             .rename(
                 columns={
-                    "growth_component": "Growth",
-                    "recent_activity_component": "Recent Activity",
-                    "contributor_component": "Contributor",
+                    "growth_component": "Growth (50%)",
+                    "recent_activity_component": "Recent Activity (30%)",
+                    "contributor_component": "Contributor Breadth (20%)",
                 }
             )
         )
@@ -1469,9 +1728,9 @@ with fingerprint_tab:
             color_continuous_scale="RdBu",
             color_continuous_midpoint=0,
             labels={
-                "x": "Momentum Component",
+                "x": "Momentum Score Component",
                 "y": "Repository",
-                "color": "Component Value",
+                "color": "Weighted Contribution",
             },
         )
 
@@ -1495,23 +1754,57 @@ with fingerprint_tab:
             width="stretch",
             config={
                 "displaylogo": False,
+                "displayModeBar": False,
+                "responsive": True,
             },
         )
 
         st.caption(
-            "The component values explain why repositories with high "
-            "activity or broad contributor participation can still receive "
-            "different overall momentum scores."
+            "Reading across a row shows how the three weighted signals combine into "
+            "the repository's final momentum score. This makes it possible to see "
+            "whether momentum is being driven primarily by growth, recent activity, "
+            "contributor breadth, or a combination of the three."
         )
 
 with discovery_tab:
     st.subheader("Repository Discovery Zone Matrix")
+    st.markdown(
+        """
+        This view combines two different perspectives on repository activity:
+        **observed contributor breadth** and **recent commit growth rate**. Unlike the
+        Momentum Ranking, this matrix does not use the full composite momentum score.
 
-    st.write(
-        "This view classifies repositories using relative growth and "
-        "contributor percentiles. The reference lines mark the finalized "
-        "50th-percentile discovery-zone thresholds."
+        **How to read this chart:**
+
+        - **X-axis — Observed Contributor Breadth Percentile:** ranks repositories by
+        the number of distinct commit authors observed across the available sample
+        timeline through the analysis cutoff. Higher percentiles indicate broader
+        observed participation relative to the other repositories in the comparison set.
+        - **Y-axis — Commit Growth Rate Percentile:** ranks repositories by their
+        recent commit-growth rate relative to the comparison set. Growth compares
+        the recent 30-day period with the preceding 30-day period.
+        - **50% threshold lines:** the horizontal and vertical lines divide repositories
+        at the 50th percentile on each dimension, creating four discovery zones.
+        - **Each point:** represents one repository. Its position determines its
+        discovery-zone classification.
+
+        **Percentiles are relative rankings, not raw percentages.** For example,
+        a contributor-breadth percentile of 75% means the repository ranks above
+        roughly 75% of the comparison set on observed contributor breadth. It does
+        not mean contributor count increased by 75%.
+        """
     )
+
+    st.markdown(
+            """
+                **Discovery zones**
+
+    - **Momentum Leader:** at or above the 50th percentile on recent growth and observed contributor breadth
+    - **Growing Candidate:** at or above the 50th percentile on recent growth and below the 50th percentile on observed contributor breadth
+    - **Stable Monitor:** below the 50th percentile on recent growth and at or above the 50th percentile on observed contributor breadth
+    - **Watchlist:** below the 50th percentile on both dimensions
+            """
+        )
 
     if filtered_radar_df.empty:
         st.warning(
@@ -1565,12 +1858,8 @@ with discovery_tab:
                 "contributor_count",
             ],
             labels={
-                "contributor_percentile": (
-                    "Contributor Strength Percentile"
-                ),
-                "growth_percentile": (
-                    "Growth Momentum Percentile"
-                ),
+                "contributor_percentile": "Observed Contributor Breadth Percentile",
+                "growth_percentile": "Commit Growth Rate Percentile",
                 "radar_zone": "Discovery Zone",
             },
         )
@@ -1682,12 +1971,11 @@ with discovery_tab:
                 },
                 hovertemplate=(
                     "<b>%{customdata[0]}</b><br>"
-                    "Discovery zone: %{customdata[1]}<br>"
-                    "Growth percentile: %{customdata[2]:.1%}<br>"
-                    "Contributor percentile: %{customdata[3]:.1%}<br>"
-                    "Radar score: %{customdata[4]:.2f}<br>"
-                    "Growth rate: %{customdata[5]}<br>"
-                    "Contributors: %{customdata[6]:,.0f}"
+                    "Discovery Zone: %{customdata[1]}<br>"
+                    "Commit Growth Rate Percentile: %{customdata[2]:.1%}<br>"
+                    "Observed Contributor Breadth Percentile: %{customdata[3]:.1%}<br>"
+                    "Commit Growth Rate: %{customdata[5]}<br>"
+                    "Observed Distinct Contributors: %{customdata[6]:,.0f}"
                     "<extra></extra>"
                 ),
             )
@@ -1696,7 +1984,7 @@ with discovery_tab:
             range=[-0.03, 1.03],
             tickvals=[0, 0.25, 0.5, 0.75, 1],
             ticktext=["0%", "25%", "50%", "75%", "100%"],
-            title_text="<b>Contributor Strength Percentile</b>",
+            title_text="<b>Observed Contributor Breadth Percentile</b>",
             showgrid=False,
             zeroline=False,
             showline=True,
@@ -1721,7 +2009,7 @@ with discovery_tab:
             range=[-0.03, 1.05],
             tickvals=[0, 0.25, 0.5, 0.75, 1],
             ticktext=["0%", "25%", "50%", "75%", "100%"],
-            title_text="<b>Growth Momentum Percentile</b>",
+            title_text="<b>Commit Growth Rate Percentile</b>",
             showgrid=False,
             zeroline=False,
             showline=True,
@@ -1801,13 +2089,18 @@ with discovery_tab:
         )
 
         st.caption(
-            "The discovery zones are relative classifications within this "
-            "historical sample window. Repositories without a prior-period "
-            "baseline are treated as New/Emerging and may receive an imputed "
-            "top growth percentile, so zone placement should be interpreted "
-            "cautiously."
+            "New/Emerging repositories require special interpretation. Where no usable "
+            "prior-period baseline exists, the discovery analysis may assign an adjusted "
+            "growth value before percentile ranking. This is not directly observed "
+            "period-over-period growth, so the resulting discovery-zone position should "
+            "be interpreted separately from repositories with a measured growth rate."
         )
 
+        st.caption(
+            "Observed contributor breadth reflects distinct commit authors represented "
+            "in the historical sample dataset, not a guaranteed complete lifetime count "
+            "of all contributors to the repository."
+        )
 # -------------------------------------------------------------------
 # Interpretation and limitations
 # -------------------------------------------------------------------
@@ -1821,18 +2114,19 @@ with insight_column:
 
     st.markdown(
         """
-        **Momentum Ranking** compares repositories using the finalized
-        normalized momentum score.
+        **Momentum Ranking** compares repositories using the composite
+        momentum score built from growth, recent activity, and recent
+        contributor breadth.
 
-        **Momentum Drivers** separates recent growth from contributor
-        participation, helping explain what supports each score.
+        **Momentum Drivers** shows how recent commit growth and recent
+        distinct-contributor count differ across repositories.
 
-        **Score Fingerprint** exposes the growth, recent activity, and
-        contributor components so the composite score is not treated as
-        a black box.
+        **Score Fingerprint** breaks the composite score into its three weighted
+        components so the result is not treated as a black box.
 
-        **Discovery Matrix** classifies repositories using relative growth
-        and contributor percentiles.
+        **Discovery Matrix** provides a separate discovery lens by comparing
+        recent commit-growth position with observed contributor breadth across
+        the available sample history.
         """
     )
 
@@ -1841,11 +2135,12 @@ with limitations_column:
 
     st.markdown(
         """
-        - The analysis uses historical public GitHub sample commit data.
-        - A fixed analysis date is used for reproducibility.
-        - Results represent the selected sample window, not GitHub as a whole.
-        - Stars, forks, issues, pull requests, and topics are not included.
-        - Bot activity and repository metadata are not separately modelled.
+        - The analysis uses historical public GitHub sample commit data, not live GitHub activity.
+        - The fixed analysis cutoff is **June 22, 2016**, supporting reproducible period comparisons.
+        - Results describe repositories represented in the sample and should not be generalized to GitHub as a whole.
+        - In the Discovery Matrix, observed contributor breadth reflects distinct commit authors represented across the available sample history, not a guaranteed complete lifetime contributor count.
+        - Stars, forks, issues, pull requests, topics, and broader repository metadata are not included.
+        - Bot activity is not separately identified or removed in this prototype.
         """
     )
 

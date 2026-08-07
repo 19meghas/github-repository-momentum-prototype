@@ -16,11 +16,11 @@ This means growth percentages should not be interpreted alone. They are more use
 
 ---
 
-## 3. Contributor Participation Improves Signal Quality
+### 3. Contributor Participation Improves Signal Quality
 
-Contributor count helps distinguish between repositories with broader participation and repositories where activity may be concentrated among only a few contributors.
+Recent distinct-contributor count helps distinguish repositories with broader current participation from repositories where recent activity may be concentrated among fewer contributors.
 
-This makes the momentum score more balanced than a simple commit-count ranking.
+This gives the normalized momentum score additional context beyond recent commit volume alone.
 
 ---
 
@@ -36,9 +36,16 @@ Normalization helps compare repositories across different activity levels by con
 
 The repository discovery zone matrix is not another version of the finalized momentum ranking.
 
-Charts 1–3 use the normalized momentum score and its weighted growth, recent activity, and contributor components. Chart 4 instead uses growth-momentum percentile and contributor-strength percentile to place repositories into four relative discovery zones.
+Charts 1–3 use the normalized momentum score and its weighted recent-growth, recent-activity, and recent-contributor components.
 
-This distinction allows the matrix to separate different repository profiles: Momentum Leaders, Growing Candidates, Stable Monitors, and Watchlist repositories.
+Chart 4 instead compares two different perspectives:
+
+- **Commit Growth Rate Percentile** — recent commit growth relative to the comparison set.
+- **Observed Contributor Breadth Percentile** — relative contributor breadth based on distinct commit authors represented across the available historical sample through the analysis cutoff.
+
+This creates four relative discovery zones: Momentum Leaders, Growing Candidates, Stable Monitors, and Watchlist repositories.
+
+The matrix therefore combines a short-term momentum signal with broader observed participation context. Observed contributor breadth is based on the sample dataset and is not a guaranteed complete lifetime GitHub contributor count.
 
 The classifications are relative to this small historical comparison set and should not be interpreted as absolute judgments about repository quality, importance, or long-term potential.
 
@@ -66,12 +73,9 @@ continued participation rather than by growth alone.
 
 ### Linux Demonstrates That Scale Is Not the Same as Momentum
 
-`torvalds/linux` has the broadest contributor base among the repositories in
-the comparison set.
+`torvalds/linux` has the broadest observed contributor base across the available sample history among the repositories in the comparison set.
 
-However, its sharply negative short-term growth lowers its finalized momentum
-score. This illustrates an important analytical distinction: a large and
-established repository can demonstrate substantial ecosystem strength without
+However, its sharply negative short-term growth lowers its finalized momentum score. This illustrates an important analytical distinction: a large and established repository can demonstrate substantial observed contributor breadth without
 showing strong momentum during the selected analysis window.
 
 ### Bootstrap Requires Cautious Interpretation
