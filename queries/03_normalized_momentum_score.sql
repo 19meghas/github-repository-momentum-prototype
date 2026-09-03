@@ -11,7 +11,7 @@ recent_activity AS (
     CROSS JOIN params p
     WHERE
         DATE(committer.date)
-        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 30 DAY)
+        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 29 DAY)
         AND p.analysis_date
     GROUP BY repo_name
 ),
@@ -25,8 +25,8 @@ past_activity AS (
     CROSS JOIN params p
     WHERE
         DATE(committer.date)
-        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 60 DAY)
-        AND DATE_SUB(p.analysis_date, INTERVAL 31 DAY)
+        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 59 DAY)
+        AND DATE_SUB(p.analysis_date, INTERVAL 30 DAY)
     GROUP BY repo_name
 ),
 
@@ -57,7 +57,7 @@ contributor_analysis AS (
     CROSS JOIN params p
     WHERE
         DATE(committer.date)
-        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 30 DAY)
+        BETWEEN DATE_SUB(p.analysis_date, INTERVAL 29 DAY)
         AND p.analysis_date
     GROUP BY repo_name
 ),

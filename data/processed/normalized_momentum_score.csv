@@ -1,7 +1,7 @@
 repo_name,commits_last_30_days,commits_prev_30_days,growth_rate,contributor_count,activity_status,growth_component,recent_activity_component,contributor_component,momentum_score
-tensorflow/tensorflow,1006,639,57.43,101,Growing,0.5,0.2128,0.0483,0.76
-Microsoft/vscode,1165,890,30.9,36,Growing,0.269,0.2465,0.0172,0.53
-apple/swift,1092,1027,6.33,87,Stable,0.0551,0.231,0.0416,0.33
-twbs/bootstrap,33,,,7,New/Emerging,0.0,0.007,0.0033,0.01
-facebook/react,135,159,-15.09,44,Stable,-0.1314,0.0286,0.0211,-0.08
-torvalds/linux,1418,6951,-79.6,418,Stable,-0.693,0.3,0.2,-0.19
+tensorflow/tensorflow,969,669,44.84,98,Growing,0.5,0.215,0.0484,0.76
+Microsoft/vscode,1107,938,18.02,35,Stable,0.2009,0.2456,0.0173,0.46
+apple/swift,1059,1026,3.22,87,Stable,0.0359,0.235,0.043,0.31
+twbs/bootstrap,33,,,7,New/Emerging,0.0,0.0073,0.0035,0.01
+facebook/react,133,158,-15.82,44,Stable,-0.1764,0.0295,0.0217,-0.13
+torvalds/linux,1352,6958,-80.57,405,Stable,-0.8984,0.3,0.2,-0.4

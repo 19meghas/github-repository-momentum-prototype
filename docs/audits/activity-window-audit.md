@@ -58,7 +58,40 @@ The existing 31-day recent / 30-day previous implementation is a confirmed imple
 The approved correction is limited to the affected date-window boundaries. No contributor, bot-handling, scoring, threshold, or Discovery Matrix methodology will be redesigned as part of this fix.
 
 ## Files updated
-...
+
+Production SQL corrected:
+
+- `queries/01_growth_analysis.sql`
+- `queries/02_repository_momentum_score.sql`
+- `queries/03_normalized_momentum_score.sql`
+- `queries/04_repository_discovery_radar.sql`
+
+Downstream outputs refreshed:
+
+- `data/processed/normalized_momentum_score.csv`
+- `data/processed/repository_discovery_radar.csv`
+- `docs/assets/charts/01_repository_momentum_ranking.png`
+- `docs/assets/charts/02_repository_momentum_drivers.png`
+- `docs/assets/charts/03_momentum_driver_fingerprint.png`
+
+The Streamlit application required no code changes because it loads the canonical processed CSVs directly.
+
+Only the affected activity-window boundaries were changed. No scoring, contributor, threshold, bot-handling, or Discovery Matrix methodology was modified.
 
 ## Validation outcome
-PASS / FAIL
+
+All four corrected production queries were rerun successfully in BigQuery.
+
+The corrected outputs matched the previously established validation results:
+
+- Query 1 returned the expected corrected recent/previous commit counts and growth rates.
+- Query 2 returned the expected corrected counts, contributor counts, classifications, and raw momentum scores.
+- Query 3 matched the side-by-side validation output, including the single classification change for VS Code from `Growing` to `Stable`; normalized ranking remained unchanged.
+- Query 4 matched the Discovery Matrix validation output; growth percentiles, radar scores, rankings, and radar zones remained unchanged.
+
+The activity-window correction is therefore considered validated and complete at the SQL-analysis level.
+
+- The corrected processed CSVs were propagated to the canonical notebook.
+- The Repository Discovery Radar and normalized momentum ranking were rerun successfully with the corrected data.
+- A repository-wide search confirmed that the old VS Code growth value (`30.90%`) remains only in this audit document as historical comparison evidence.
+- The Streamlit dashboard was restarted from the project environment and confirmed to load the corrected processed CSVs. The normalized momentum view reflects the corrected scores and VS Code classification, while Discovery Matrix zones remain unchanged as expected.

@@ -20,12 +20,12 @@ repo_metrics AS (
         COUNT(*) AS total_commits,
         COUNT(DISTINCT author_name) AS contributor_count,
         COUNTIF(
-            commit_date BETWEEN DATE_SUB(p.analysis_date, INTERVAL 30 DAY)
+            commit_date BETWEEN DATE_SUB(p.analysis_date, INTERVAL 29 DAY)
             AND p.analysis_date
         ) AS commits_last_30_days,
         COUNTIF(
-            commit_date BETWEEN DATE_SUB(p.analysis_date, INTERVAL 60 DAY)
-            AND DATE_SUB(p.analysis_date, INTERVAL 31 DAY)
+            commit_date BETWEEN DATE_SUB(p.analysis_date, INTERVAL 59 DAY)
+            AND DATE_SUB(p.analysis_date, INTERVAL 30 DAY)
         ) AS commits_prev_30_days
     FROM repo_activity
     CROSS JOIN params p
