@@ -4,7 +4,9 @@ A SQL, Python, and Streamlit analytics project for exploring repository-level mo
 
 This project transforms raw GitHub commit records into interpretable repository signals, including recent activity, prior-period activity, growth rate, contributor participation, normalized momentum score, and discovery-zone classification.
 
-The goal is not to create a production-grade GitHub ranking system. Instead, this project demonstrates how public developer activity data can be cleaned, modeled, scored, visualized, and interpreted as a portfolio-ready analytics workflow.
+The goal is not to create a production-grade GitHub ranking system. Instead, this project demonstrates how public developer activity data can be cleaned, modeled, scored, visualized, and interpreted as a portfolio-ready analytics workflow. 
+
+This repository represents the exploratory stage that preceded the larger GH Archive-based GitHub Technology Radar project; it documents the development of the initial momentum concept rather than serving as a smaller implementation of the later system.
 
 ---
 
