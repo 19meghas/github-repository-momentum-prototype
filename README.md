@@ -219,10 +219,7 @@ Together, these views move from ranking to explanation to classification.
 - `Microsoft/vscode` ranks second at `0.53`, combining positive growth with
   substantial recent activity.
 - `torvalds/linux` has the broadest observed contributor base in the available sample history within the comparison set
-- `twbs/bootstrap` is classified as New/Emerging because it lacks a usable
-  prior-period baseline. Its Momentum Leader discovery-zone placement partly
-  reflects an imputed top growth percentile and should therefore be interpreted
-  cautiously.
+- `twbs/bootstrap` is labeled New/Emerging in the activity-status logic because it lacks a usable prior-period baseline. Separately, its Momentum Leader discovery-zone placement partly reflects an imputed top growth percentile and should therefore be interpreted cautiously.
 
 ---
 
