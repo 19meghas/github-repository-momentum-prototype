@@ -255,6 +255,8 @@ Potential extensions include:
 - tracking consistency and acceleration over time,
 - extending the deployed dashboard with broader time-series coverage and additional repository signals.
 
+These extensions are not currently being developed within this prototype repository. The broader multi-period, multi-signal methodology is being developed separately in the GitHub Technology Radar project.
+
 ---
 
 ## Current Status
